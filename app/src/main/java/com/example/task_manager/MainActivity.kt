@@ -8,7 +8,7 @@ import com.example.task_manager.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var db:NotesDatabaseHelper
+    private lateinit var db: NotesDatabaseHelper
     private lateinit var notesAdapter: NotesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,24 +16,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db= NotesDatabaseHelper(this)
-        notesAdapter= NotesAdapter(db.getAllNotes(),this)
+        db = NotesDatabaseHelper(this)
+        notesAdapter = NotesAdapter(ArrayList(), this)
 
         binding.notesRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.notesRecyclerView.adapter = notesAdapter
 
-
-        binding.addButton.setOnClickListener{
-            val intent = Intent(this,AddNoteActivity::class.java)
+        binding.addButton.setOnClickListener {
+            val intent = Intent(this, AddNoteActivity::class.java)
             startActivity(intent)
-
-
         }
     }
 
     override fun onResume() {
         super.onResume()
-        notesAdapter.refreshData(db.getAllNotes())
+        refreshData()
     }
 
+    private fun refreshData() {
+        val notes = db.getAllNotes()
+        notesAdapter.refreshData(notes)
+    }
 }
